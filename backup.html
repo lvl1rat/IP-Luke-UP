@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Lukeup</title>
+    <link rel="icon" href="/static/iplookup/logo.png">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 'DroidobeshDepot';
+            src: url('/static/iplookup/fonts/DroidobeshDepot-gxmVE.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'Anton SC';
+            src: url('/static/iplookup/fonts/AntonSC-Regular.ttf') format('truetype')
+        }
+        @font-face {
+            font-family: 'Saira';
+            src: url('/static/iplookup/fonts/Saira-VariableFont_wdth,wght.ttf') format('truetype');
+            font-weight: 100 900;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Exo 2';
+            src: url('/static/iplookup/fonts/Exo2-VariableFont_wght.ttf') format('truetype')
+        }
+        .saira {
+            font-family: "Saira", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 200;
+            font-style: normal;
+            font-variation-settings:
+                "wdth" 100;
+        }
+
+        .exo-2 {
+            font-family: "Exo 2", sans-serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+        }
+        .anton-sc-regular {
+            font-family: "Anton SC", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+        /*font-family: Arial, sans-serif;*/
+        body {
+            /*background: linear-gradient(135deg, #f4d35e, #f3d879);*/
+            /*background: #e98f4e;*/
+            background-image: url("/static/iplookup/background_upper_layer2.png");
+            padding-top: 130px;
+            filter: blur(2px);
+            transition: filter 0.5s ease; /* Smooth transition when removing the blur */
+            overflow: hidden; /* Prevent scroll during loading */
+            
+        }
+        /* Custom font applied to letters */
+        .custom-font {
+            font-family: 'DroidobeshDepot';
+            font-weight: 200;
+            src: url('/static/iplookup/fonts/DroidobeshDepot-gxmVE.otf') format('opentype');
+            display: inline-block; /* For letter-level control */
+            opacity: 1;
+            transition: font-family 0.3s ease, opacity 0.3s ease; /* Smooth transition for each letter */
+        }
+
+        /* Transition back to default font */
+        .default-font {
+            font-family: "Exo 2", sans-serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+            font-variation-settings:
+                "wdth" 100;
+            opacity: 0; /* Start hidden */
+        }
+
+        /* Animation to fade each letter in sequence */
+        .fade-in {
+            animation: fadeInFont 0.5s ease forwards;
+        }
+
+        @keyframes fadeInFont {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+
+        .polygon-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f1e1a5;
+            clip-path:polygon(30% 30%, 70% 40%, 100% 30%, 100% 100%, 70% 100%, 30% 100%, 0% 1000%, 0% 40%);
+            z-index: -2;
+            
+        }
+        .lgo-image {
+            position:absolute;
+            top: 0;
+            left: 0;
+            height: 100px; /* Adjust height as needed */
+            width: auto; /* Maintain aspect ratio */
+            /*object-fit: contain;*/
+            margin-right: 20%; /* Adjust spacing between logo and links */
+            margin-left: 30px;
+        }
+        #logo {
+            transition: height 0.3s ease; /* Smooth transition for height */
+        }
+
+        #banner {
+            transition: margin-top 0.3s ease; /* Smooth transition for marginTop */
+        }
+
+        .navbar {
+            font-family: "Saira", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 200;
+            font-style: normal;
+            font-variation-settings:
+                "wdth" 100;
+            border-bottom: solid 0.5rem #e98f4e;
+        }
+        #navbar {
+            background: #8baea9;
+            padding-bottom: 0;
+            padding-top: 0;
+        }
+        .navbar-toggler{
+            --bs-navbar-active-color: none;
+        }
+        .navbar-toggler-logo {
+            height: 100px;
+        }
+        @keyframes slidePaddingRight {
+            from {
+                padding-right: 0; /* Start with no padding */
+            }
+            to {
+                padding-right: 10%; /* End with 20% padding */
+            }
+        }
+        .banner-image{
+            height: 100px;
+            margin-top: 0;
+            padding:0;
+            animation: slidePaddingRight 30s linear forwards;
+        }
+        </style>
+            <script>
+
+                function winSizeBodyAdjust(){
+                    
+                    const body = document.body
+                    const winWidth = window.innerWidth
+                    console.log(winWidth);
+
+                    if (winWidth >= 950) {
+                        document.getElementById("nav-first-link").style.marginLeft = "12rem";
+                        document.body.style.paddingTop = "130px";
+                    }
+                    else if (winWidth <= 540 ){
+                        document.body.style.paddingTop = "200px";
+                    }
+                    else {
+                        document.body.style.paddingTop = "230px";
+                    }
+                }
+                
+                function queryHover() {
+                    const queryArea = document.getElementById("queryArea");
+
+                    queryArea.addEventListener('mouseover', () => {
+                        queryArea.style.boxShadow = "0 2px 5px 0 #262626;";
+                        console.log("queryArea Hover!!")
+                    });
+                    queryArea.addEventListener('mouseout', () => {
+                        queryArea.style.boxShadow = "none";
+                    });
+                }
+
+                function logoHover() {      
+                    const navbar = document.getElementById('navbar');
+                    const logo = document.getElementById('logo');
+                    const banner = document.getElementById('banner');
+                    const backgroundAssets = document.querySelectorAll(".background-asset");
+                    console.log(backgroundAssets);
+                    backAssetOne = backgroundAssets[0];
+                    backAssetTwo = backgroundAssets[1];
+                    console.log(backAssetOne.src+" <One\n"+backAssetTwo.src+" <Two");
+                                       
+                    defaultHeight = logo.offsetHeight;
+                    defaultBannerMargin = banner.style.marginTop;
+                    console.log(defaultBannerMargin);
+
+                    navbar.addEventListener('mouseover', () =>{
+                        banner.style.marginTop = "10px";
+                        navbar.style.boxShadow = "0 4px 8px 0 rgba(0, 0, 0, 0.4)";
+
+                        
+                    });
+                    
+                    navbar.addEventListener('mouseout', () =>{
+                        banner.style.marginTop = "0px";
+                        navbar.style.boxShadow = "none";
+                    });
+                    
+                    logo.addEventListener('mouseover', () =>{
+                        logo.style.height = defaultHeight + 10 + "px";
+                    });
+                    logo.addEventListener('mouseout', () =>{
+                        logo.style.height = defaultHeight + "px";
+                    });
+                }
+                
+                function animateFontSwitch() {
+                    // Get all elements with the class 'animated-text'
+                    const textElements = document.querySelectorAll('.animated-text');
+
+                    // Iterate over each element and apply the animation
+                    textElements.forEach(textElement => {
+                        const textContent = textElement.textContent;
+                        const textLenght = textElement.textContent.length
+                        var textSpeed = 0;
+                        
+                        if (textLenght >= 30){
+                            textSpeed = 10;
+                        }else{
+                            textSpeed = 25;
+                        }                       
+
+                        // Clear the original text and replace it with spans for each letter
+                        textElement.innerHTML = '';
+                        textContent.split('').forEach((char, index) => {
+                            const span = document.createElement('span');
+                            span.textContent = char; // Set the letter content
+                            span.classList.add('custom-font'); // Start with custom font
+
+                            // Add a delay for each letter's animation
+                            setTimeout(() => {
+                                span.classList.remove('custom-font');
+                                span.classList.add('default-font', 'fade-in'); // Switch to default font with animation
+                            }, index * textSpeed); // Adjust delay per letter (100ms)
+                            textElement.appendChild(span);
+                        });
+                    });
+                }
+
+                function swapBanner(){
+                    
+                    activeBanner = document.getElementById('banner');
+                    bannerPath = "/static/iplookup/";
+                    bannerOptions = ['banner1.png', 'banner2.png'];
+
+                    console.log("Optioooon >>>>>"+bannerOptions[Math.round(Math.random() * bannerOptions.length)]);
+                    activeBanner.setAttribute('src', ""+bannerPath + bannerOptions[Math.round(Math.random() * bannerOptions.length)]);
+                    console.log(activeBanner.getAttribute('src') + " << active banner");
+                }
+
+                function ajdustBannerSpeed(){
+
+                    const logos = document.querySelectorAll(".banner-image");
+                    const navbar = document.getElementById("navbar");
+                    const winWidth = window.innerWidth;
+
+                    logos.forEach((logo) => {
+                        const src = logo.getAttribute("src");
+                        // Extract the filename (e.g., "logo1.png")
+                        const fileName = src.split("/").pop();
+                        // Extract the name without the extension (e.g., "logo1")
+                        const nameWithoutExtension = fileName.split(".")[0];
+                        // Perform operations based on the name
+                        if (nameWithoutExtension === "banner1") {
+                            
+                            logo.style.animationDuration = "1s";
+                            logo.style.animationTimingFunction = 'ease-out';
+                            if(winWidth >= 950){
+                                navbar.setAttribute("style", "padding-bottom: 0; padding-top: 0; background: linear-gradient(90deg, rgba(139,174,169,1) 83%, rgba(233,143,78,1) 85%) !important;");
+                            }
+                        } else if (nameWithoutExtension === "banner2") {          
+                            logo.style.animationDuration = "40s";
+                        } else {
+                            logo.style.animationDuration = "40s";
+                        }
+                    });
+
+                }
+
+                function initializeToggleSwitch (){
+                    // Switch button
+                    const toggleSwitch = document.getElementById("toggleSwitch");
+                    const switchLabel = document.getElementById("switchLabel");
+                    const switchLabelAlt = document.getElementById("switchLabelAlt");
+                    const formLabel = document.getElementById("formLabel");
+                    const defaultFormLabel = formLabel.textContent;
+                    const userInput = document.getElementById("ipInput");
+
+                    toggleSwitch.addEventListener("click", () => {
+                        const isChecked = toggleSwitch.getAttribute("aria-checked") === "true";
+                        toggleSwitch.setAttribute("aria-checked", !isChecked);
+
+                        // Update labels based on state
+                        if (!isChecked) {
+                            switchLabel.style.color = "#8baea9"; // Deselect IP
+                            switchLabelAlt.style.color = "#e98f4e"; // Select DNS
+                            formLabel.textContent = "Enter a domain";
+                            userInput.setAttribute("name", "dns");
+                            userInput.setAttribute("placeholder", "e.g., www.website.com")
+                        } else {
+                            switchLabel.style.color = "#e98f4e"; // Select IP
+                            switchLabelAlt.style.color = "#8baea9"; // Deselect DNS
+                            formLabel.textContent = defaultFormLabel;
+                            userInput.setAttribute("name", "ip");
+                            userInput.setAttribute("placeholder","e.g., 8.8.8.8")
+                            
+                        }
+                    });
+
+                    // Enable keyboard interaction for accessibility
+                    toggleSwitch.addEventListener("keydown", (event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                            toggleSwitch.click();
+                            event.preventDefault();
+                        }
+                    });
+                    //Regex Validation
+                    document.getElementById("ipForm").addEventListener("submit", function (event) {
+
+                        const userValue = userInput.value;
+                        const ipRegex = /\b((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|[1-9]?\d)\b/;
+                        const dnsRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\.[a-zA-Z]{2,11}?$/;
+                        isIpSelected = userInput.getAttribute('name') === 'ip';
+                        isDnsSelected = userInput.getAttribute('name') === 'dns';
+
+                        console.log(userValue)
+                        console.log(ipRegex.test(userValue));
+                        if (isIpSelected && !ipRegex.test(userValue)) {
+                            console.log("Invalid IP!");
+                            event.preventDefault();
+                            }
+                        else if (isDnsSelected && !dnsRegex.test(userValue)){
+                            console.log("invalid DNS!")
+                            event.preventDefault();
+                        }
+                    });
+                }
+
+                function searchButtonToQueryEffect(){
+                    mainButton = document.getElementById("mainSearchButton");
+                    defaultButtonContent = mainButton.textContent;
+
+                    mainButton.addEventListener('mouseover', () =>{
+                        mainButton.textContent = "Query";
+                    });
+                    mainButton.addEventListener('mouseout', () => {
+                        mainButton.textContent = defaultButtonContent;
+                    });
+                }
+
+                function mapResize() {
+                    const map = document.getElementById("map");
+                    const mapListPosition = document.getElementById("map-list-item");
+
+                    if (!map || !mapListPosition) {
+                        console.error("Map or map-list-item not found!");
+                        return;
+                    }
+
+                    mapListPosition.addEventListener("mouseover", () => {
+                        console.log(map.getAttribute("height"));
+                        map.setAttribute("height", "250");
+                    });
+
+                    mapListPosition.addEventListener("mouseout", () => {
+                        console.log(map.getAttribute("height"));
+                        map.setAttribute("height", "150");
+                    });
+                }
+
+
+                window.onload = () => {
+
+                    swapBanner();
+                    ajdustBannerSpeed();
+                    initializeToggleSwitch();
+                    searchButtonToQueryEffect();
+                    logoHover();
+                    winSizeBodyAdjust();
+                    animateFontSwitch();
+                    mapResize();
+                }
+                
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.style.filter = 'none';
+                    document.body.style.overflow = 'auto';
+
+                });
+            </script>
+        <style>
+        .nav-item {
+            display: flex;
+            align-items: center; /* Vertically align items */
+            justify-content: center;
+            margin: 0 10%; /* Space between items */
+        }
+
+        .nav-link {
+            color: #f4d35e;
+            background-color: #e98f4e00;
+            border-radius: 5px;
+            padding: 10px 20px;
+            text-align: center;
+            display: inline-block;
+            min-width: 120px;
+            position: relative;
+            overflow: hidden; /* Ensures the effect stays within the button */
+        }
+       
+        .navbar-custom .nav-item {
+            position: relative; /* Allows precise adjustment */
+            top: 0px; /* Move links upwards; adjust value as needed */
+        }
+        .nav-link:hover {
+            background-color: transparent;
+            color: #f4d35e;
+            border: solid 1px #f4d35e;
+            box-shadow: 0 8px 6px -6px #262626;
+            animation: linkBorderAnimation 0.1s ease-in-out forwards;
+        }
+        @keyframes linkBorderAnimation {
+            from {
+                border-color: #f4d35e00; /* Start with no padding */
+            }
+            to {
+                border-color: #f4d35e; /* End with 20% padding */
+            }
+        }
+        .nav-link:hover::before,
+        .btn:hover::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -150%; /* Start off-screen */
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                #f4d35e 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: skewX(-30deg); /* Adds a diagonal effect */
+            transition: all 0.3s ease;
+            animation: highlightSweep 0.1s linear forwards; /* Loop the animation */
+        }
+        @keyframes highlightSweep {
+            0% {
+                left: -150%; /* Start far off-screen */
+            }
+            100% {
+                left: 150%; /* Move completely across the button */
+            }
+        }
+        .nav-link:active {
+            color:#8baea9; /* Text color */
+            background-color: #e98f4e;
+            border-color: #8baea9;
+            box-shadow: none;
+        }
+
+        .nav-link:visited {
+            color: #f4d35e;
+        }
+        .navbar-toggler {
+            background-color: rgba(255, 255, 255, 0);
+            border: none;
+        }
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+        .conteiner-custom{
+            padding-top: 0rem !important;
+            padding-bottom: 5rem !important;
+            
+        }
+        .card,
+        .card-body,
+        .card-shadow-mg {
+            background-color: transparent; /* Ensure transparency for all parts of the card */
+            border: none; /* Remove any borders */
+            box-shadow: none !important; /* Remove all box shadows */
+        }
+        .card-title {
+            padding-bottom: 0;
+            margin-bottom:10%;
+            width: 40%; height: auto;
+            border-radius: 50% 50% 50% 0;
+        }
+        .btn,
+        .btn-primary {
+            background-color:  #f1e1a5;
+            border-color:  #8baea9;
+            color: #8baea9;
+            /*box-shadow: 0 8px 6px -6px #262626;*/
+            position: relative;
+            overflow: hidden; /* Ensures the effect stays within the button */
+        }
+        .btn-primary {
+            background-color: #e98f4e;
+            color: #f1e1a5;
+        }
+        .btn-primary:hover {
+            background-color: #e98f4e;
+            border-color:  #e98f4e;
+            color: #f1e1a5;
+            box-shadow: 0 8px 6px -6px #262626;
+            animation: linkBorderAnimation 0.1s ease-in-out forwards;
+
+        }
+        .btn-primary:active {
+            --bs-btn-active-color: #e98f4e;
+            --bs-btn-active-border-color: none;
+            --bs-btn-active-bg: #f1e1a5;
+            /*box-shadow: inset 0 0 6px black;*/
+            box-shadow: 0 0 0 0 black;
+        }
+        /*Switch Button*/
+        .switch-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Switch label */
+        .switch-label {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #e98f4e;
+        }
+
+        /* Switch base */
+        .switch {
+            width: 50px;
+            height: 25px;
+            background: #8baea9;
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s ease;
+        }
+
+        /* Switch circle */
+        .switch-circle {
+            width: 20px;
+            height: 20px;
+            background: #f1e1a5;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Active switch circle position */
+        .switch[aria-checked="true"] .switch-circle {
+            left: 56%;
+        }
+        .list-group,
+        .list-group-flush,
+        .table-item,
+        .list-group-item {
+            --bs-list-group-bg: rgba(255, 255, 255, 0);
+            --bs-list-group-border-color: #718355;
+            color: #f1e1a5;
+        }
+        #map {
+            transition: height 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .map-link {
+            text-decoration: none;
+            color: #8baea9;
+        }
+        .yellow {
+            color: #f4d35e !important;
+        }
+        .icons {
+            height: 15px;
+            margin: 4px;
+            fill: #f1e1a5;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px 0;
+            color: #f1e1a5 !important;
+            background-color: #8baea9;
+            /*97A97C*/
+            padding-bottom: 2px;
+            font-size: 0.8rem;
+        }
+
+    </style>
+</head>
+<body class="saira">
+
+    <img class="background-asset"src="/static/iplookup/MoistDevice.png" style="position: absolute; height: 30px; left: 75%;top: 16%;">
+    <img class="background-asset" src="/static/iplookup/MoistDevice.png" style="position: absolute; height: 20px; left: 70%; top: 15%;">
+
+    <nav id="navbar" class="saira navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <img src="/static/iplookup/logo.png" alt="Toggle Navigation" class="navbar-toggler-logo">
+            </button>
+            <div id="navbarNav" class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="" style="margin-right: 20%;">
+                        <a href="/lookup/"><img id="logo" class="nav-brand lgo-image d-none d-lg-block" src="/static/iplookup/logo.png"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="nav-first-link" class="nav-link" href="{% url 'contact' %}">TOOLS</a>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">ABOUT</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <img id="banner" class="banner-image" src="" alt="">
+    </nav>
+    <div class="container py-5 conteiner-custom">
+        <div class="row justify-content-center">
+
+            <div class="dropdown" style="position: absolute; left: 0; top: 20%;margin: 0; padding: 0;">
+                <button class="btn dropdown-toggle saira" type="button" id="contactDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="color: #f1e1a5;font-size: 0.8rem; background:#8baea9 ; color: white; border-radius: 0 10px 10px 0;">
+                    Need Help?
+                </button>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="contactDropdown" style="width: 300px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); border-radius: 10px; background: #8baea9;">
+                    <div class="card border-0" style="background: #8baea9; border-radius: 10px; padding: 0;">
+                        <div class="card-body" style="padding: 0.75rem; padding: 0;">
+                            <div style="border-radius: 10px; padding: 0.5rem; background: #8baea9;">
+                                <div class="list-group saira" style="text-align: center; background-color: #8e8e8e; border-radius: 20px; color: #f1e1a5 !important;margin-bottom: 5%; box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2); font-size: 0.8rem;">
+                                    <span style="display: inline-block;">Server Status:</span>
+                                    <span style="display: inline-block;color: #ace655">Online</span>
+                                </div>
+                                <form class="saira">
+                                    <input type="text" name="message" class="form-control" id="formContactMessage" placeholder="Contact Us..." style="padding-bottom: 25%; font-size: 0.8rem;" value="{{ contact_message|default:'' }}" required>
+                                    <button class="btn btn-primary" id="formSubmitButton" style="width: 100%;">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle saira" type="button" id="changelogDropdownButton" data-bs-toggle="collapse" data-bs-target="#changelogDropdownContent" aria-expanded="false" style="color: #f1e1a5;font-size: 0.8rem; background:#8baea9 ; color: white; border-radius: 0 10px 10px 0;">
+                                Changelog
+                            </button>
+                            <div id="changelogDropdownContent" class="collapse" style=" border-radius: none;">
+                                <ol class="list-group" style="font-size: 0.8rem;">
+                                    <li class="list-group-item">Finishing Home Page</li>
+                                    <li class="list-group-item">Adding Tools section</li>
+                                    <li class="list-group-item">Implemented Contacts</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center text-white" style="background: #8baea9; border-radius: 0 0 10px 10px; font-size: 0.7rem;">
+                            Last Updated: Nov 26, 2024
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                // Prevent nested buttons from closing the parent dropdown
+                document.getElementById("formSubmitButton").addEventListener("click", function (event) {
+                    event.stopPropagation(); // Prevent the click event from closing the dropdown
+                });
+            
+                document.getElementById("changelogDropdownButton").addEventListener("click", function (event) {
+                    event.stopPropagation(); // Prevent the click event from closing the dropdown
+                });
+            </script>
+
+            <div class="col-md-6" style="z-index:auto;">
+                <div class="card shadow-sm">                  
+                    <div class="card-body text-center">
+
+                        <img class="card-title" src="/static/iplookup/logo1.png"  style="position:absolute;right: 35%; border-radius: 50%; margin: 0 0 0 0 !important;"alt="">  
+                        <div id="queryArea" style="margin-top: 150px;">
+                            <img src="/static/iplookup/brand.png" style="z-index:1;display:flex; border-radius: 10px 10px 0 0; margin: 0 0; padding: 10px;width: 20%; height: auto; background-color: #8baea9;">
+                            <form id="ipForm" method="get" action="/lookup/" style="z-index:0;padding: 0 5% 0 5%;background-color: #8baea9; border-radius: 0 10px 10px 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)">
+                                <div class="mb-3">
+                                    <label id= "formLabel" for="ipInput" class="form-label" style="font-size: 0.8rem; color: #f4d35e; text-align: left; display: block;padding-top: 10px;">Enter IP Address (IPv4/IPv6)</label>
+                                    <input type="text" name="ip" class="form-control" id="ipInput" placeholder="e.g., 8.8.8.8" value="{{ searched_ip|default:'' }}" required>
+                                </div>
+                                <div class="d-grid">
+                                    <button id="mainSearchButton" type="submit" class="btn btn-primary animated-text">{{ quote }}</button>
+                                </div>
+                            </form>
+                            <div class="button-row justify-content-end" style="display: flex;margin-top: 2%;">
+                                <div class="switch-container">
+                                    <span id="switchLabel" class="switch-label">IP</span>
+                                    <div class="switch" role="switch" aria-checked="false" tabindex="0" id="toggleSwitch">
+                                        <div class="switch-circle"></div>
+                                    </div>
+                                    <span id="switchLabelAlt" class="switch-label" style="color: #8baea9">DNS</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+
+            {% if ip_data %}
+            <div class="col-md-6">
+                <div class="card shadow-sm" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                    <div class="card-body" style="background-color: #8baea9; border-radius: 10px; padding-top: 0;">
+                        <div class="mt-4">
+                            <ul class="list-group list-group-flush">
+                                <div id="map-list-item" class="map-resize">
+                                    <iframe
+                                        id="map"
+                                        style="border-radius: 10px;"
+                                        width="100%" 
+                                        height="150"                                       
+                                        src="{{ map_url }}"
+                                        >
+                                    </iframe>
+                                </div>
+                                <br/>
+                                <small style="margin-left: 1rem; font-size: 0.8rem; margin-top: 0.1rem;">
+                                    <a class="map-link yellow"href="{{ shorter_url }}">View Larger Map</a>
+                                </small>
+                                <li class="list-group-item" style="color:#f1e1a5">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-6 animated-text"><strong>Lat:</strong>     {{ ip_data.lat }}</div>
+                                        <div class="col-md-6 animated-text"><strong>Lon:</strong>     {{ip_data.lon}}</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item"><strong>IP Address:</strong>    {{ searched_ip }}</li>
+                                <li class="list-group-item"><strong>City:</strong>  {{ ip_data.city }}</li>
+                                <li class="list-group-item"><strong>Region:</strong>    {{ ip_data.regionName }} ({{ ip_data.region }})</li>
+                                <li class="list-group-item"><strong>Country:</strong>   {{ ip_data.country}} ({{ ip_data.countryCode }})</li>
+                                <li class="list-group-item">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-6"><strong>ISP:</strong>   {{ ip_data.isp}}</div>
+                                        <div class="col-md-6"><strong>Org:</strong>   {{ ip_data.org}}</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item"><strong>{{ ip_data.as }}</strong></li>
+                            </ul>
+                        </div>     
+                        {% elif searched_ip %}
+                            <div class="alert alert-danger mt-4">No results found for IP: {{ searched_ip }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+        <footer class="footer text-white text-center py-2 saira fixed-bottom">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <table>
+                            <tr><a href=""><svg class="icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a></tr>
+                            <tr><a href=""><svg class="icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg></a></tr>
+                            <tr><a href=""><svg class="icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3 .3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5 .3-6.2 2.3zm44.2-1.7c-2.9 .7-4.9 2.6-4.6 4.9 .3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3 .7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3 .3 2.9 2.3 3.9 1.6 1 3.6 .7 4.3-.7 .7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3 .7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3 .7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></a></tr>
+                            <tr><a><svg class="icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg></a></tr>
+                        </table>
+                        <table>
+                            <tr><img src="/static/iplookup/brand.png" style="display:inline-block;margin: 0; padding: 0;bottom: 0; left: 0; margin: 0; padding: 10px;width: 40px; height: auto;"></tr>
+                            <tr><p style="display:inline-block;margin: 0; padding: 0;">© 2024 IP Luke Up. All rights reserved.</p></tr>
+                        </table>
+                        <p class="" style="position: absolute; bottom: 0; right: 0; margin: 0; padding: 5px;font-size: 0.8rem;">version: 0.5.0</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
