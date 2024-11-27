@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+
+{% block title %}Home - My Django Site{% endblock %}
+
+{% block content %}
+<div class="saira container py-5 conteiner-custom">
+    <div class="row justify-content-end">
+        <div class="col-md-6">
+            <div class="card shadow-sm" style="background-color: #8baea9; color: #f1e1a5;">                    
+                <div class="card-body" style="margin: 0; padding: 10px;">
+                        <div class="mb-3">
+                        </div>
+                        <div class="d-grid" style="text-align: left;">
+                            <form>
+                                <label id= "formLabel" for="formContactMessage" class="form-label" style="font-size: 0.8rem; color: #f4d35e; text-align: left; display: block;margin-top:0;">Contact us!</label>
+                                <input type="text" name="message" class="form-control" id="formContactMessage" placeholder="..." style="padding-bottom: 50%;" value="{{ contact_message|default:'' }}" required>
+                                <button class="btn btn-brimary" style="width: 100%;">Submit</button>
+                            </form>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+{% endblock %}
