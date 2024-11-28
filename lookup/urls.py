@@ -8,5 +8,5 @@ urlpatterns = [
     path('lookup/', ip_lookup, name='ip_lookup'),
     path('admin/', admin.site.urls),
     path('about/', views.about, name='about'),
-    path('contact/', views.contact, name='contact'),
+    path('api/contact/', views.contact_api, name='contact_api'),
 ]

@@ -309,10 +309,6 @@
                         const isChecked = toggleSwitch.getAttribute("aria-checked") === "true";
                         toggleSwitch.setAttribute("aria-checked", !isChecked);
 
-                        if (!formLabel){
-                            return;
-                        }
-
                         // Update labels based on state
                         if (!isChecked) {
                             switchLabel.style.color = "#8baea9"; // Deselect IP
@@ -343,12 +339,13 @@
                         const userValue = userInput.value;
                         const ipRegex = /\b((25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.){3}(25[0-5]|2[0-4]\d|[1-9]?\d)\b/;
                         const dnsRegex = /^(?!:\/\/)([a-zA-Z0-9-_]+\.)*[a-zA-Z0-9][a-zA-Z0-9-_]+\.[a-zA-Z]{2,11}?$/;
+                        const ipv6Regex = /^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})\.){3,3}(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2})\.){3,3}(25[0-5]|2[0-4][0-9]|[0-1]?[0-9]{1,2}))$/;
                         isIpSelected = userInput.getAttribute('name') === 'ip';
                         isDnsSelected = userInput.getAttribute('name') === 'dns';
 
                         console.log(userValue)
                         console.log(ipRegex.test(userValue));
-                        if (isIpSelected && !ipRegex.test(userValue)) {
+                        if (isIpSelected && !ipRegex.test(userValue) || !ipv6Regex.test(userValue)) {
                             console.log("Invalid IP!");
                             event.preventDefault();
                             }
@@ -399,9 +396,10 @@
                     ajdustBannerSpeed();
                     logoHover();
                     animateFontSwitch();
+                    initializeToggleSwitch();// These two will error out at endpoints like /about or /contact because are always searching
+                    searchButtonToQueryEffect();//for elements that will not always be present on every page. (e.g. No userInput at /about)
+                    //also they are preventing subsequent functions from loading, hints the current solution of calling them last
                     mapResize();
-                    initializeToggleSwitch();
-                    searchButtonToQueryEffect();
                 }
                 
                 document.addEventListener("DOMContentLoaded", () => {
@@ -416,6 +414,11 @@
             align-items: center; /* Vertically align items */
             justify-content: center;
             margin: 0 10%; /* Space between items */
+        }
+        
+        .nav-first-link{
+            --bs-nav-link-color: #f4d35e !important;
+            color: #f4d35e !important;
         }
 
         .nav-link {
@@ -483,13 +486,10 @@
             border-color: #8baea9;
             box-shadow: none;
         }
+        .nav-link:focus {
+            color: #f4d35e;
+        }
 
-        .nav-link:visited {
-            color: #f4d35e;
-        }
-        .nav-link::after{
-            color: #f4d35e;
-        }
         .navbar-toggler {
             background-color: rgba(255, 255, 255, 0);
             border: none;
@@ -641,7 +641,7 @@
                         <a href="/lookup/"><img id="logo" class="nav-brand lgo-image d-none d-lg-block" src="/static/iplookup/logo.png"></a>
                     </li>
                     <li class="nav-item">
-                        <!--<a id="nav-first-link" class="nav-link" href="">TOOLS</a>-->
+                        <!--<a id="nav-first-link" class="nav-link" href="{% url 'contact' %}">TOOLS</a>-->
                         <div class="dropdown">
                             <button id="nav-first-link" class="nav-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="">
                                 TOOLS
@@ -673,6 +673,7 @@
                                             color: #f4d35e;
                                         }
                                     </style>
+                                    <script></script>
                                 </ul>
                             </div> 
                         </div>
@@ -703,6 +704,9 @@
                                 <form class="saira">
                                     <input type="text" name="message" class="form-control" id="formContactMessage" placeholder="Contact Us..." style="padding-bottom: 25%; font-size: 0.8rem;" value="{{ contact_message|default:'' }}" required>
                                     <button class="btn btn-primary" id="formSubmitButton" style="width: 100%;">Submit</button>
+                                    {% if back_message %}
+                                    <div>{{ back_message }}</div>
+                                    {% endif %}
                                 </form>
                             </div>
                         </div>
@@ -712,18 +716,19 @@
                             </button>
                             <div id="changelogDropdownContent" class="collapse" style=" border-radius: none;">
                                 <ol class="list-group" style="font-size: 0.8rem;">
-                                    <li class="list-group-item">Finishing Home Page</li>
-                                    <li class="list-group-item">Adding Tools section</li>
-                                    <li class="list-group-item">Implemented Contacts</li>
+                                    <li class="list-group-item">Navbar Tools section added.</li>
+                                    <li class="list-group-item">Contacts added.</li>
+                                    <li class="list-group-item">Navbar interface bugs fixed.</li>
                                 </ol>
                             </div>
                         </div>
                         <div class="card-footer text-center text-white" style="background: #8baea9; border-radius: 0 0 10px 10px; font-size: 0.7rem;">
-                            Last Updated: Nov 26, 2024
+                            Last Updated: Nov 27, 2024
                         </div>
                     </div>
                 </div>
             </div>
+            
             <script>
                 // Prevent nested buttons from closing the parent dropdown
                 document.getElementById("formSubmitButton").addEventListener("click", function (event) {
@@ -734,11 +739,86 @@
                     event.stopPropagation(); // Prevent the click event from closing the dropdown
                 });
             </script>
-            {% block content %}
-            <!-- Default content -->
-            {% endblock %}
+
+            <div class="col-md-6" style="z-index:auto;">
+                <div class="card shadow-sm">                  
+                    <div class="card-body text-center">
+
+                        <img class="card-title" src="/static/iplookup/logo1.png"  style="position:absolute;right: 35%; border-radius: 50%; margin: 0 0 0 0 !important;"alt="">  
+                        <div id="queryArea" style="margin-top: 150px;">
+                            <img src="/static/iplookup/brand.png" style="z-index:1;display:flex; border-radius: 10px 10px 0 0; margin: 0 0; padding: 10px;width: 20%; height: auto; background-color: #8baea9;">
+                            <form id="ipForm" method="get" action="/lookup/" style="z-index:0;padding: 0 5% 0 5%;background-color: #8baea9; border-radius: 0 10px 10px 10px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)">
+                                <div class="mb-3">
+                                    <label id= "formLabel" for="ipInput" class="form-label" style="font-size: 0.8rem; color: #f4d35e; text-align: left; display: block;padding-top: 10px;">Enter IP Address (IPv4/IPv6)</label>
+                                    <input type="text" name="ip" class="form-control" id="ipInput" placeholder="e.g., 8.8.8.8" value="{{ searched_ip|default:'' }}" required>
+                                </div>
+                                <div class="d-grid">
+                                    <button id="mainSearchButton" type="submit" class="btn btn-primary animated-text">{{ quote }}</button>
+                                </div>
+                            </form>
+                            <div class="button-row justify-content-end" style="display: flex;margin-top: 2%;">
+                                <div class="switch-container">
+                                    <span id="switchLabel" class="switch-label">IP</span>
+                                    <div class="switch" role="switch" aria-checked="false" tabindex="0" id="toggleSwitch">
+                                        <div class="switch-circle"></div>
+                                    </div>
+                                    <span id="switchLabelAlt" class="switch-label" style="color: #8baea9">DNS</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+
+            {% if ip_data %}
+            <div class="col-md-6">
+                <div class="card shadow-sm" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                    <div class="card-body" style="background-color: #8baea9; border-radius: 10px; padding-top: 0;">
+                        <div class="mt-4">
+                            <ul class="list-group list-group-flush">
+                                <div id="map-list-item" class="map-resize">
+                                    <iframe
+                                        id="map"
+                                        style="border-radius: 10px;"
+                                        width="100%" 
+                                        height="150"                                       
+                                        src="{{ map_url }}"
+                                        >
+                                    </iframe>
+                                </div>
+                                <br/>
+                                <small style="margin-left: 1rem; font-size: 0.8rem; margin-top: 0.1rem;">
+                                    <a class="map-link yellow"href="{{ shorter_url }}">View Larger Map</a>
+                                </small>
+                                <li class="list-group-item" style="color:#f1e1a5">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-6 animated-text"><strong>Lat:</strong>     {{ ip_data.lat }}</div>
+                                        <div class="col-md-6 animated-text"><strong>Lon:</strong>     {{ip_data.lon}}</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item"><strong>IP Address:</strong>    {{ searched_ip }}</li>
+                                <li class="list-group-item"><strong>City:</strong>  {{ ip_data.city }}</li>
+                                <li class="list-group-item"><strong>Region:</strong>    {{ ip_data.regionName }} ({{ ip_data.region }})</li>
+                                <li class="list-group-item"><strong>Country:</strong>   {{ ip_data.country}} ({{ ip_data.countryCode }})</li>
+                                <li class="list-group-item">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-6"><strong>ISP:</strong>   {{ ip_data.isp}}</div>
+                                        <div class="col-md-6"><strong>Org:</strong>   {{ ip_data.org}}</div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item"><strong>{{ ip_data.as }}</strong></li>
+                            </ul>
+                        </div>     
+                        {% elif searched_ip %}
+                            <div class="alert alert-danger mt-4">No results found for IP: {{ searched_ip }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
+
+
         <footer class="footer text-white text-center py-2 saira fixed-bottom">
             <div class="container">
                 <div class="row justify-content-center">
