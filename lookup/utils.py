@@ -1,4 +1,4 @@
-import requests, random, re, dns.resolver, json
+import requests, random, re, dns.resolver, json, requests
 from django.core.cache import cache
 
 CACHE_TIMEOUT = 60 * 15
@@ -80,3 +80,30 @@ def dns_lookup(domain):
             except Exception as e:
                 print(f"An error occurred: {e}")
                 continue
+
+
+def fetch_url_info(target_url):
+    """
+    Fetch information using a POST request, where `url` is a variable.
+
+    Args:
+        post_url (str): The API endpoint to send the POST request to.
+        target_url (str): The URL to include in the POST data.
+
+    Returns:
+        dict: The JSON response from the API if successful.
+        None: If the request fails.
+    """
+    try:
+        # Send the POST request
+        response = requests.post(f"https://urlhaus-api.abuse.ch/v1/url/{target_url}")
+        
+        # Check if the request was successful
+        response.raise_for_status()
+        
+        # Return the parsed JSON response
+        print(response.json())
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")
+        return None

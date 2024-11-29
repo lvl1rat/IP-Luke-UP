@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .utils import get_ip_data, switch_query, generate_map_urls, dns_lookup
-from .models import ContactMessage
-import re, socket, json
+from .models import ContactMessage, Visitor
+import re, socket, json, requests
 
 from django.template import engines
 
@@ -32,11 +32,24 @@ def contact_api(request):
             return JsonResponse({'status': 'error', 'message': 'Invalid JSON'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
+def getVisitorWeather(request):
+    user_ip = request.META.get('REMOTE_ADDR')
+    response = requests.get(f'http://ip-api.com/json/{user_ip}')
+    
+
 
 def ip_lookup(request):
     # Check if the request contains an IP or DNS query
     ip = request.GET.get('ip', None)
     dns = request.GET.get('dns', None)
+
+    visitor_ip_address = request.META.get('REMOTE_ADDR')
+    visitor_user_agent = request.META.get('HTTP_USER_AGENT')
+    #visitor_log = Visitor.objects.create(
+    #    ip_address = visitor_ip_address,
+    #    user_agent = visitor_user_agent,
+    #    url_visited = request.get_full_path(),
+    #)
 
     if ip:
         print("ip hit")
