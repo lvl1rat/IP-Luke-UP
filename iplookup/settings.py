@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-dglepab+x%(daqv*wb3c(o3%l63-fik_-s#y)!wcc6*o3&r0k_
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'f529-177-137-27-20.ngrok-free.app',
+    'https://ip-luke-up.onrender.com',
     '127.0.0.1'
 ]
 
