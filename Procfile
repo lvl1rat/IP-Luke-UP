@@ -1,1 +1,1 @@
-web: gunicorn iplookup.wsgi:application
+web: gunicorn iplookup.wsgi:application --bind 0.0.0.0:$PORT
