@@ -27,7 +27,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 SECRET_KEY = 'django-insecure-dglepab+x%(daqv*wb3c(o3%l63-fik_-s#y)!wcc6*o3&r0k_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'https://ip-luke-up.onrender.com',
