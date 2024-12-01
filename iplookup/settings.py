@@ -27,10 +27,10 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 SECRET_KEY = 'django-insecure-dglepab+x%(daqv*wb3c(o3%l63-fik_-s#y)!wcc6*o3&r0k_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
-    'f529-177-137-27-20.ngrok-free.app',
+    'https://ip-luke-up.onrender.com',
     '127.0.0.1'
 ]
 
