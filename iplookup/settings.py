@@ -12,13 +12,14 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "iplookup" / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"] 
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -34,10 +35,13 @@ ALLOWED_HOSTS = [
     'ip-luke-up.onrender.com',
     '127.0.0.1'
 ]
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+
 SESSION_COOKIE_DOMAIN = ".ip-luke-up.onrender.com"
 CSRF_TRUSTED_ORIGINS = ['https://ip-luke-up.onrender.com']
-
-SECURE_SSL_REDIRECT = True
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -98,12 +102,8 @@ WSGI_APPLICATION = 'iplookup.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lukeup',            # Database name
-        'USER': 'lukeup_admin',      # Username
-        'PASSWORD': 'ZeRuela',       # Password
-        'HOST': 'localhost',         # Or IP address if remote
-        'PORT': '5432',              # Default PostgreSQL port
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
