@@ -31,10 +31,16 @@ SECRET_KEY = 'django-insecure-dglepab+x%(daqv*wb3c(o3%l63-fik_-s#y)!wcc6*o3&r0k_
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'https://ip-luke-up.onrender.com',
+    'ip-luke-up.onrender.com',
     '127.0.0.1'
 ]
+SESSION_COOKIE_DOMAIN = ".ip-luke-up.onrender.com"
+CSRF_TRUSTED_ORIGINS = ['https://ip-luke-up.onrender.com']
 
+SECURE_SSL_REDIRECT = True
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
