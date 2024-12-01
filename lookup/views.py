@@ -45,11 +45,12 @@ def ip_lookup(request):
 
     visitor_ip_address = request.META.get('REMOTE_ADDR')
     visitor_user_agent = request.META.get('HTTP_USER_AGENT')
-    #visitor_log = Visitor.objects.create(
-    #    ip_address = visitor_ip_address,
-    #    user_agent = visitor_user_agent,
-    #    url_visited = request.get_full_path(),
-    #)
+    
+    visitor_log = Visitor.objects.create(
+        ip_address = visitor_ip_address,
+        user_agent = visitor_user_agent,
+        url_visited = request.get_full_path(),
+    )
 
     if ip:
         print("ip hit")

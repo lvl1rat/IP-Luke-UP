@@ -17,8 +17,8 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"] 
-
+STATICFILES_DIRS = [BASE_DIR / "iplookup" / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -82,10 +82,21 @@ WSGI_APPLICATION = 'iplookup.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'lukeup',            # Database name
+        'USER': 'lukeup_admin',      # Username
+        'PASSWORD': 'ZeRuela',       # Password
+        'HOST': 'localhost',         # Or IP address if remote
+        'PORT': '5432',              # Default PostgreSQL port
     }
 }
 
