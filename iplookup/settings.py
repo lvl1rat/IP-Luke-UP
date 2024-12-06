@@ -15,15 +15,15 @@ import os
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "iplookup/static"] 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / "static"] 
+STATIC_ROOT = BASE_DIR.parent / 'staticfiles'
 
-#print(BASE_DIR)
-#print(STATICFILES_DIRS)
-#print(STATIC_ROOT)
+print(BASE_DIR)
+print(STATICFILES_DIRS)
+print(STATIC_ROOT)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
