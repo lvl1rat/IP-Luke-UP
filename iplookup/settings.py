@@ -17,8 +17,8 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"] 
+#STATIC_URL = '/static/'
+#STATICFILES_DIRS = [BASE_DIR / "static"] 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
@@ -29,7 +29,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 SECRET_KEY = 'django-insecure-dglepab+x%(daqv*wb3c(o3%l63-fik_-s#y)!wcc6*o3&r0k_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'ip-luke-up.onrender.com',
