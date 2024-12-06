@@ -29,23 +29,23 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 SECRET_KEY = 'django-insecure-dglepab+x%(daqv*wb3c(o3%l63-fik_-s#y)!wcc6*o3&r0k_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#####vvvvvvvv TURN THIS OFF 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'ip-luke-up.onrender.com',
-    '127.0.0.1'
+    '127.0.0.1',
+    'localhost'
 ]
 
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
 
-SESSION_COOKIE_DOMAIN = ".ip-luke-up.onrender.com"
-CSRF_TRUSTED_ORIGINS = ['https://ip-luke-up.onrender.com']
-
-USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    USE_X_FORWARDED_HOST = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    CSRF_TRUSTED_ORIGINS = ['https://ip-luke-up.onrender.com']
+    SESSION_COOKIE_DOMAIN = ".ip-luke-up.onrender.com"
 
 # Application definition
 
