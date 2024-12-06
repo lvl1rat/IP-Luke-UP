@@ -35,7 +35,6 @@ def contact_api(request):
 def getVisitorWeather(request):
     user_ip = request.META.get('REMOTE_ADDR')
     response = requests.get(f'http://ip-api.com/json/{user_ip}')
-    
 
 
 def ip_lookup(request):

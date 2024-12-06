@@ -17,9 +17,9 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"] 
-STATIC_ROOT = BASE_DIR.parent / 'staticfiles'
+STATIC_URL = '/static'
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 print(BASE_DIR)
 print(STATICFILES_DIRS)
@@ -32,23 +32,13 @@ print(STATIC_ROOT)
 SECRET_KEY = 'django-insecure-dglepab+x%(daqv*wb3c(o3%l63-fik_-s#y)!wcc6*o3&r0k_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'ip-luke-up.onrender.com',
     '127.0.0.1',
     'localhost'
 ]
-
-
-if not DEBUG:
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
-    USE_X_FORWARDED_HOST = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    CSRF_TRUSTED_ORIGINS = ['https://ip-luke-up.onrender.com']
-    SESSION_COOKIE_DOMAIN = ".ip-luke-up.onrender.com"
 
 # Application definition
 
@@ -99,8 +89,8 @@ WSGI_APPLICATION = 'iplookup.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://ip_luke_up_db_user:9d4qcbZeB2ELfqiPckhrNsGrAvF4tZ34@dpg-ct94lbu8ii6s73fq4ceg-a/ip_luke_up_db'
-        #default='postgres://postgres:14192ZeRuela@localhost:5432/lukeup'
+        #default='postgresql://ip_luke_up_db_user:9d4qcbZeB2ELfqiPckhrNsGrAvF4tZ34@dpg-ct94lbu8ii6s73fq4ceg-a/ip_luke_up_db'
+        default='postgres://postgres:14192ZeRuela@localhost:5432/lukeup'
     )
 }
 DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
