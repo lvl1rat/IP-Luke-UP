@@ -96,7 +96,8 @@ WSGI_APPLICATION = 'iplookup.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://postgres:14192ZeRuela@localhost:5432/lukeup'
+        default='postgresql://ip_luke_up_db_user:9d4qcbZeB2ELfqiPckhrNsGrAvF4tZ34@dpg-ct94lbu8ii6s73fq4ceg-a/ip_luke_up_db'
+        #default='postgres://postgres:14192ZeRuela@localhost:5432/lukeup'
     )
 }
 DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
